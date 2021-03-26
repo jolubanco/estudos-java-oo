@@ -1,6 +1,6 @@
-public class Conta {
+public abstract class Conta {
 
-    private double saldo; //faz com que o atributo não possa ser acessado diretamente, fica privado. Apenas utilizando algum método
+    protected double saldo; //faz com que o atributo não possa ser acessado diretamente, fica privado. Apenas utilizando algum método
     private int agencia;
     private int numero;
     private Cliente titular; //Cliente é o nome da classe Cliente, para linkar a conta com o cliente. Agora recebe a posição do objeto cliente
@@ -11,15 +11,14 @@ public class Conta {
         Conta.total++; //toda vez que instancia uma conta, a variavel total é acrescida em 1 (podemos usar apenas total++)
         this.agencia = agencia;
         this.numero = numero;
-        System.out.println("Estou criando uma conta " + this.numero);
+        //System.out.println("Estou criando uma conta " + this.numero);
+        //System.out.println("O total de contas é " + Conta.total);
     }
 
 
     //o void significa que o método não retornará nada
-    //sempre precisamos definir o tivo da variável que o método recebe
-    public void deposita(double valor){
-        this.saldo += valor;
-    }
+    //sempre precisamos definir o tipo da variável que o método recebe
+    public abstract void deposita(double valor);
 
     //boolean irá ternonar um verdadeiro ou falso
     public boolean saca(double valor){
@@ -32,8 +31,7 @@ public class Conta {
     }
 
     public boolean transfere(double valor, Conta destino){
-        if(this.saldo >= valor){
-            this.saca(valor);
+        if(this.saca(valor)){
             destino.deposita(valor);
             return true; //return para a execução do método
         } else {
