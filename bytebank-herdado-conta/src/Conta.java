@@ -20,7 +20,7 @@ public abstract class Conta {
     //sempre precisamos definir o tipo da variável que o método recebe
     public abstract void deposita(double valor);
 
-    //boolean irá ternonar um verdadeiro ou falso
+    //boolean irá retornar um verdadeiro ou falso
     public boolean saca(double valor){
         if(this.saldo >= valor){
             this.saldo -= valor;
