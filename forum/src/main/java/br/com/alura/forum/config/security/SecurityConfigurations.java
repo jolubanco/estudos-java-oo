@@ -4,6 +4,8 @@ import br.com.alura.forum.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,7 +19,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity //habilitando o método de segurança do spring
-@Configurable //o spring le as configurações que faremos do projeto no momento da inicialização
+@Configuration //o spring le as configurações que faremos do projeto no momento da inicialização
+@Profile(value = {"prod","test"}) //informa para o spring carregar essa classe de configurações apenas se o profile for de 'prod'
 public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -50,6 +53,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
         .antMatchers(HttpMethod.GET, "/topicos/*").permitAll()
         .antMatchers(HttpMethod.POST, "/auth").permitAll()
         .antMatchers(HttpMethod.GET, "/actuator/**").permitAll() //em produção não podemos deixar permitAll, porque devolve informações sensíveis
+        .antMatchers(HttpMethod.DELETE, "/topicos/*").hasRole("MODERADOR") //restringindo o acesso pelo perfil do usuário
         .anyRequest().authenticated() //qualquer outra requisicao não informada precisará de autenticação
         .and().csrf().disable() //desbilita uma ferramente que evita ataques hackers, pois nao vamos fazer a autorização via web
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //agora o spring não vai criar a seção
